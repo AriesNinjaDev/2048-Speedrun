@@ -4,7 +4,9 @@ function GameManager(size, InputManager, Actuator, StorageManager) {
   this.storageManager = new StorageManager;
   this.actuator       = new Actuator;
 
-  this.startTiles     = 12;
+  this.startTiles     = 2;
+
+  this.FirstMove = true;
 
   this.inputManager.on("move", this.move.bind(this));
   this.inputManager.on("restart", this.restart.bind(this));
@@ -34,6 +36,15 @@ GameManager.prototype.isGameTerminated = function () {
 // Set up the game
 GameManager.prototype.setup = function () {
   var previousState = this.storageManager.getGameState();
+  
+  if (!previousState || previousState.score == 0) {
+    this.FirstMove = true;
+    this.actuator.unlockTimer();
+    this.actuator.resetTimer();
+  } else {
+    this.FirstMove = false;
+    this.actuator.lockTimer();
+  }
 
   // Reload the game from a previous game if present
   if (previousState) {
@@ -121,6 +132,10 @@ GameManager.prototype.prepareTiles = function () {
 
 // Move a tile and its representation
 GameManager.prototype.moveTile = function (tile, cell) {
+  if (this.FirstMove) {
+    this.actuator.startTimer();
+    this.FirstMove = false;
+  }
   this.grid.cells[tile.x][tile.y] = null;
   this.grid.cells[cell.x][cell.y] = tile;
   tile.updatePosition(cell);
@@ -183,6 +198,7 @@ GameManager.prototype.move = function (direction) {
     this.addRandomTile();
 
     if (!this.movesAvailable()) {
+      this.actuator.stopTimer();
       this.over = true; // Game over!
     }
 

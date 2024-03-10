@@ -47,17 +47,17 @@ h1.title {
   float: left;
 }
 
-@include keyframes(move-up) {
-  0% {
-    top: 25px;
-    opacity: 1;
-  }
+// @include keyframes(move-up) {
+//   0% {
+//     top: 25px;
+//     opacity: 1;
+//   }
 
-  100% {
-    top: -50px;
-    opacity: 0;
-  }
-}
+//   100% {
+//     top: -50px;
+//     opacity: 0;
+//   }
+// }
 
 .scores-container {
   float: right;
@@ -145,15 +145,15 @@ hr {
   margin: 0 auto;
 }
 
-@include keyframes(fade-in) {
-  0% {
-    opacity: 0;
-  }
+// @include keyframes(fade-in) {
+//   0% {
+//     opacity: 0;
+//   }
 
-  100% {
-    opacity: 1;
-  }
-}
+//   100% {
+//     opacity: 1;
+//   }
+// }
 
 // Styles for buttons
 @mixin button {
@@ -414,36 +414,36 @@ hr {
   }
 }
 
-@include keyframes(appear) {
-  0% {
-    opacity: 0;
-    @include transform(scale(0));
-  }
+// @include keyframes(appear) {
+//   0% {
+//     opacity: 0;
+//     @include transform(scale(0));
+//   }
 
-  100% {
-    opacity: 1;
-    @include transform(scale(1));
-  }
-}
+//   100% {
+//     opacity: 1;
+//     @include transform(scale(1));
+//   }
+// }
 
-.tile-new .tile-inner {
-  @include animation(appear 200ms ease $transition-speed);
-  @include animation-fill-mode(backwards);
-}
+// .tile-new .tile-inner {
+//   @include animation(appear 200ms ease $transition-speed);
+//   @include animation-fill-mode(backwards);
+// }
 
-@include keyframes(pop) {
-  0% {
-    @include transform(scale(0));
-  }
+// @include keyframes(pop) {
+//   0% {
+//     @include transform(scale(0));
+//   }
 
-  50% {
-    @include transform(scale(1.2));
-  }
+//   50% {
+//     @include transform(scale(1.2));
+//   }
 
-  100% {
-    @include transform(scale(1));
-  }
-}
+//   100% {
+//     @include transform(scale(1));
+//   }
+// }
 
 .tile-merged .tile-inner {
   z-index: 20;

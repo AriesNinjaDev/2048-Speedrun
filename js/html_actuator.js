@@ -1,7 +1,8 @@
 function HTMLActuator() {
-  this.tileContainer    = document.querySelector(".tile-container");
-  this.scoreContainer   = document.querySelector(".score-container");
-  this.bestContainer    = document.querySelector(".best-container");
+  this.tileContainer = document.querySelector(".tile-container");
+  this.scoreContainer = document.querySelector(".score-container");
+  this.bestContainer = document.querySelector(".best-container");
+  this.timeContainer = document.querySelector(".time-container");
   this.messageContainer = document.querySelector(".game-message");
 
   this.score = 0;
@@ -31,7 +32,6 @@ HTMLActuator.prototype.actuate = function (grid, metadata) {
         self.message(true); // You win!
       }
     }
-
   });
 };
 
@@ -49,9 +49,9 @@ HTMLActuator.prototype.clearContainer = function (container) {
 HTMLActuator.prototype.addTile = function (tile) {
   var self = this;
 
-  var wrapper   = document.createElement("div");
-  var inner     = document.createElement("div");
-  var position  = tile.previousPosition || { x: tile.x, y: tile.y };
+  var wrapper = document.createElement("div");
+  var inner = document.createElement("div");
+  var position = tile.previousPosition || { x: tile.x, y: tile.y };
   var positionClass = this.positionClass(position);
 
   // We can't use classlist because it somehow glitches when replacing classes
@@ -125,15 +125,60 @@ HTMLActuator.prototype.updateBestScore = function (bestScore) {
 };
 
 HTMLActuator.prototype.message = function (won) {
-  var type    = won ? "game-won" : "game-over";
+  var type = won ? "game-won" : "game-over";
   var message = won ? "You win!" : "Game over!";
 
   this.messageContainer.classList.add(type);
   this.messageContainer.getElementsByTagName("p")[0].textContent = message;
 };
 
+var timerValid = true;
+
 HTMLActuator.prototype.clearMessage = function () {
   // IE only takes one value to remove at a time.
   this.messageContainer.classList.remove("game-won");
   this.messageContainer.classList.remove("game-over");
 };
+
+HTMLActuator.prototype.resetTimer = function () {
+  if (timerValid) {
+    this.timeContainer.innerText = (0.0).toFixed(1);
+    clearInterval(timerInterval);
+  }
+};
+
+HTMLActuator.prototype.stopTimer = function () {
+  clearInterval(timerInterval);
+};
+
+HTMLActuator.prototype.unlockTimer = function () {
+  timerValid = true;
+  this.timeContainer.innerText = (0.0).toFixed(1);
+};
+
+HTMLActuator.prototype.lockTimer = function () {
+  timerValid = false;
+  clearInterval(timerInterval);
+  this.timeContainer.innerText = "---";
+};
+
+let timerInterval;
+let startTime;
+let elapsedTime = 0;
+
+HTMLActuator.prototype.startTimer = function () {
+  if (!timerValid) return;
+  startTime = Date.now(); // Set the start time when the timer starts
+  timerInterval = setInterval(updateTimer, 100); // Update timer every 100 milliseconds
+};
+
+function updateTimer() {
+  const currentTime = Date.now(); // Get the current time
+  elapsedTime = (currentTime - startTime) / 1000; // Calculate elapsed time in seconds
+  displayTime(elapsedTime.toFixed(1)); // Display time with 1 decimal point precision
+}
+
+function displayTime(timeInSeconds) {
+  // Replace this line with how you want to display the timer, like updating an HTML element's text content
+  document.querySelector(".time-container").innerText = timeInSeconds;
+}
